@@ -2,22 +2,22 @@ const gameArea = document.getElementById("game-area");
 const scoreElement = document.getElementById("score");
 const progressBar = document.querySelector(".progress");
 let score = 0;
-let heartInterval;
+let giftInterval;
 
-function spawnHeart() {
+function spawnGift() {
     if (score >= 10) return;
 
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.textContent = "❤️";
-    heart.style.left = `${Math.random() * 90}vw`;
-    heart.style.top = `-50px`;
+    const gift = document.createElement("div");
+    gift.classList.add("gift");
+    gift.textContent = "🎁"; // Birthday gift symbol
+    gift.style.left = `${Math.random() * 90}vw`;
+    gift.style.top = `-50px`;
 
-    heart.addEventListener("click", () => {
+    gift.addEventListener("click", () => {
         score++;
         scoreElement.textContent = score;
         progressBar.style.width = `${(score / 10) * 100}%`;
-        heart.remove();
+        gift.remove();
 
         if (score === 10) {
             // Add countdown message
@@ -33,9 +33,9 @@ function spawnHeart() {
             document.body.appendChild(countdownMessage);
 
             const countdownInterval = setInterval(() => {
-                countdownMessage.textContent = `Congratulations! ❤️🎉\n Moving to the next level in ${countdown} seconds...`;
+                countdownMessage.textContent = `Congratulations! 🎉🎁\n Moving to the next level in ${countdown} seconds...`;
                 countdown--;
-                
+
                 if (countdown < 0) {
                     clearInterval(countdownInterval);
                     window.location.href = "flowers.html";
@@ -44,14 +44,14 @@ function spawnHeart() {
         }
     });
 
-    gameArea.appendChild(heart);
+    gameArea.appendChild(gift);
 
     setTimeout(() => {
-        heart.remove();
+        gift.remove();
     }, 4000);
 }
 
-heartInterval = setInterval(spawnHeart, 1000);
+giftInterval = setInterval(spawnGift, 1000);
 
 // Particles in the background
 const canvas = document.getElementById("particles");
@@ -77,11 +77,11 @@ for (let i = 0; i < 50; i++) {
 
 function drawParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     for (let particle of particles) {
         ctx.fillStyle = `rgba(255, 0, 100, ${particle.opacity})`;
         ctx.font = `${particle.size}px Arial`;
-        ctx.fillText("❤️", particle.x, particle.y);
+        ctx.fillText("🎁", particle.x, particle.y); // Replace heart with gift
         particle.y -= particle.speedY;
 
         if (particle.y < -10) {
@@ -89,49 +89,8 @@ function drawParticles() {
             particle.x = Math.random() * canvas.width;
         }
     }
-    
+
     requestAnimationFrame(drawParticles);
 }
 
 drawParticles();
-
-// Add this code to script2.js (game page)
-function initializeAudio() {
-    const musica = document.getElementById("musica");
-    
-    // Retrieve the saved playback time
-    const savedTime = localStorage.getItem('audioTime');
-    if (savedTime) {
-        musica.currentTime = parseFloat(savedTime);
-    }
-    
-    // Save the playback time periodically
-    setInterval(() => {
-        localStorage.setItem('audioTime', musica.currentTime);
-    }, 1000);
-    
-    // Handle the end of the song
-    musica.addEventListener('ended', function() {
-        musica.currentTime = 0;
-        musica.play();
-    });
-    
-    // Attempt to play
-    document.addEventListener("click", function() {
-        musica.play().catch(function(error) {
-            console.log("Error playing audio:", error);
-        });
-    }, { once: true });
-    
-    musica.play().catch(function(error) {
-        console.log("Autoplay blocked:", error);
-    });
-}
-
-document.addEventListener("DOMContentLoaded", initializeAudio);
-
-// Before the page closes or the user navigates away
-window.addEventListener('beforeunload', function() {
-    const musica = document.getElementById("musica");
-    localStorage.setItem('audioTime', musica.currentTime);
-});
