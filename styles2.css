@@ -49,7 +49,7 @@ h1 {
     overflow: hidden;
 }
 
-.heart {
+.gift {
     position: absolute;
     font-size: 2rem;
     cursor: pointer;
@@ -61,7 +61,7 @@ h1 {
     to { transform: translateY(100vh); opacity: 0; }
 }
 
-/* Fondo de partículas */
+/* Gift Particles */
 canvas {
     position: fixed;
     top: 0;
